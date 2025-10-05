@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2025 at 10:35 AM
+-- Generation Time: Oct 05, 2025 at 12:20 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -88,7 +88,8 @@ INSERT INTO `fruits` (`fruit_id`, `name`, `description`, `price`, `stock_quantit
 (14, 'Pumpkin', 'Eating pumpkin offers benefits for your immune system, vision, heart health, and digestion, largely due to its rich content of beta-carotene, vitamins A, C, and E, fiber, and potassium', '40', 60, 5, '1759135376.jpg'),
 (15, 'Mango', 'Mangoes offer numerous health benefits due to their high content of vitamins, minerals, and antioxidants like vitamin C, vitamin A, and mangiferin. Key benefits include boosting the immune system, supporting eye and skin health, aiding digestion, promoting heart health by regulating blood pressure, and having anti-inflammatory properties that may help reduce the risk of certain cancers', '300', 40, 6, '1759135724.jpg'),
 (16, 'Pineapple', 'Pineapple offers benefits for digestion, skin, and immune health due to its nutrient and enzyme content, particularly the enzyme bromelain, which helps break down protein and reduce inflammation. It is rich in vitamin C and manganese, which support collagen production, boost immunity, and contribute to bone health', '100', 100, 6, '1759135810.jpg'),
-(17, 'Papaya', 'Papaya has many benefits, including protection against heart disease, reduced inflammation, aid in digestion, and boosting your immune system', '50', 200, 6, '1759135889.webp');
+(17, 'Papaya', 'Papaya has many benefits, including protection against heart disease, reduced inflammation, aid in digestion, and boosting your immune system', '50', 200, 6, '1759135889.webp'),
+(18, 'Custard Apple', 'Custard apples provide sustained energy, are rich in Vitamin C, fiber, B6, magnesium, potassium, and copper, and have little fat', '100', 20, 6, NULL);
 
 -- --------------------------------------------------------
 
@@ -112,9 +113,7 @@ INSERT INTO `fruits_types` (`type_id`, `type_name`, `type_img`) VALUES
 (3, 'Dry Fruits', 'ti1759112564.webp'),
 (4, 'Citrus Fruits', 'ti1759111677.webp'),
 (5, 'Pepos', 'ti1759111711.webp'),
-(6, 'Tropical', 'ti1759111756.webp'),
-(8, 'test type', NULL),
-(10, 'test type2', 'ti1759110476.png');
+(6, 'Tropical', 'ti1759111756.webp');
 
 -- --------------------------------------------------------
 
@@ -142,7 +141,97 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2025_09_25_114442_create_fruits_table', 2),
 (8, '2025_09_25_120037_add_fruit_id_foreignkey_to_cart_items_table', 3),
 (9, '2025_09_26_100423_add_user_type_to_users_table', 4),
-(10, '2025_09_28_110127_add_image_to_fruits_table', 5);
+(11, '2025_09_28_110127_add_image_to_fruits_table', 5),
+(12, '2025_10_02_151210_create_orders_table', 6),
+(13, '2025_10_03_054704_create_order_details_table', 7),
+(14, '2025_10_03_062548_create_order_billing_shipping_addresses_table', 8),
+(15, '2025_10_04_135018_add_column_ship_cost_to_orders_table', 9);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `uid` bigint(20) UNSIGNED NOT NULL,
+  `order_date` datetime NOT NULL,
+  `total_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `shipping_cost` int(11) NOT NULL,
+  `pay_method` varchar(20) NOT NULL DEFAULT 'pending',
+  `pay_status` varchar(20) NOT NULL DEFAULT 'pending',
+  `order_status` varchar(20) NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `uid`, `order_date`, `total_amount`, `shipping_cost`, `pay_method`, `pay_status`, `order_status`, `created_at`, `updated_at`) VALUES
+(1, 3, '2025-10-04 14:15:29', '2000.00', 100, 'CoD', 'Pending', 'Pending', '2025-10-04 08:45:29', '2025-10-04 08:45:29'),
+(2, 4, '2025-10-04 17:25:24', '600.00', 100, 'CoD', 'Pending', 'Pending', '2025-10-04 11:55:24', '2025-10-04 11:55:24'),
+(3, 4, '2025-10-04 17:27:47', '600.00', 100, 'CoD', 'Pending', 'Pending', '2025-10-04 11:57:47', '2025-10-04 11:57:47');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_billing_shipping_addresses`
+--
+
+CREATE TABLE `order_billing_shipping_addresses` (
+  `oa_id` bigint(20) UNSIGNED NOT NULL,
+  `oid` bigint(20) UNSIGNED NOT NULL,
+  `b_fullname` varchar(255) NOT NULL,
+  `b_phone` varchar(255) NOT NULL,
+  `b_email` varchar(255) DEFAULT NULL,
+  `b_address` varchar(255) NOT NULL,
+  `b_pincode` varchar(255) NOT NULL,
+  `s_fullname` varchar(255) NOT NULL,
+  `s_phone` varchar(255) NOT NULL,
+  `s_email` varchar(255) DEFAULT NULL,
+  `s_address` varchar(255) NOT NULL,
+  `s_pincode` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_billing_shipping_addresses`
+--
+
+INSERT INTO `order_billing_shipping_addresses` (`oa_id`, `oid`, `b_fullname`, `b_phone`, `b_email`, `b_address`, `b_pincode`, `s_fullname`, `s_phone`, `s_email`, `s_address`, `s_pincode`) VALUES
+(1, 1, 'Kiran Sone', '+91 9164551309', 'kirans.git@gmail.com', 'Test address-1, India', '582103', 'Kiran N Sone', '0 9164551309', 'kirans606@gmail.com', 'Test address-2, India', '582120'),
+(2, 2, 'Test User', '+91 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-1, India', '582103', 'Test User', '0 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-2, India', '582120'),
+(3, 3, 'Test User', '+91 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-1, India', '582103', 'Test User', '0 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-2, India', '582120');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_details`
+--
+
+CREATE TABLE `order_details` (
+  `od_id` bigint(20) UNSIGNED NOT NULL,
+  `oid` bigint(20) UNSIGNED NOT NULL,
+  `fid` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `unit_price` decimal(10,2) NOT NULL,
+  `sub_total` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`od_id`, `oid`, `fid`, `qty`, `unit_price`, `sub_total`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 5, '60.00', '300.00', '2025-10-04 08:45:29', '2025-10-04 08:45:29'),
+(2, 1, 10, 2, '800.00', '1600.00', '2025-10-04 08:45:29', '2025-10-04 08:45:29'),
+(3, 2, 6, 2, '250.00', '500.00', '2025-10-04 11:55:24', '2025-10-04 11:55:24'),
+(4, 3, 5, 1, '300.00', '300.00', '2025-10-04 11:57:47', '2025-10-04 11:57:47'),
+(5, 3, 13, 5, '40.00', '200.00', '2025-10-04 11:57:47', '2025-10-04 11:57:47');
 
 -- --------------------------------------------------------
 
@@ -181,7 +270,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `phone`, `user_type`) VALUES
 (1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$OSaLMu2yqmv9TDIEvNc4XOvexFNhE784a7fknUTSCdq5c3KhkOlEq', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 1),
-(3, 'Kiran Sone', 'kirans.git@gmail.com', NULL, '$2y$10$OSaLMu2yqmv9TDIEvNc4XOvexFNhE784a7fknUTSCdq5c3KhkOlEq', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 0);
+(3, 'Kiran Sone', 'kirans.git@gmail.com', NULL, '$2y$10$OSaLMu2yqmv9TDIEvNc4XOvexFNhE784a7fknUTSCdq5c3KhkOlEq', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 0),
+(4, 'Test User', 'kiransone.dgsts@gmail.com', NULL, '$2y$10$d3CGvcpjncyh89JaAoDMjeLwtDAY0MTzZ0PYnfXj1iKRFPk/JA1Iq', NULL, '2025-10-04 11:53:51', '2025-10-04 11:53:51', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -223,6 +313,28 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `orders_uid_foreign` (`uid`);
+
+--
+-- Indexes for table `order_billing_shipping_addresses`
+--
+ALTER TABLE `order_billing_shipping_addresses`
+  ADD PRIMARY KEY (`oa_id`),
+  ADD KEY `order_billing_shipping_addresses_oid_foreign` (`oid`);
+
+--
+-- Indexes for table `order_details`
+--
+ALTER TABLE `order_details`
+  ADD PRIMARY KEY (`od_id`),
+  ADD KEY `order_details_oid_foreign` (`oid`),
+  ADD KEY `order_details_fid_foreign` (`fid`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -243,7 +355,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `cart_item_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -255,7 +367,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `fruits`
 --
 ALTER TABLE `fruits`
-  MODIFY `fruit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `fruit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `fruits_types`
@@ -267,13 +379,31 @@ ALTER TABLE `fruits_types`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `order_billing_shipping_addresses`
+--
+ALTER TABLE `order_billing_shipping_addresses`
+  MODIFY `oa_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `order_details`
+--
+ALTER TABLE `order_details`
+  MODIFY `od_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -291,6 +421,25 @@ ALTER TABLE `cart_items`
 --
 ALTER TABLE `fruits`
   ADD CONSTRAINT `fktypeid` FOREIGN KEY (`type_id`) REFERENCES `fruits_types` (`type_id`);
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_billing_shipping_addresses`
+--
+ALTER TABLE `order_billing_shipping_addresses`
+  ADD CONSTRAINT `order_billing_shipping_addresses_oid_foreign` FOREIGN KEY (`oid`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_details`
+--
+ALTER TABLE `order_details`
+  ADD CONSTRAINT `order_details_fid_foreign` FOREIGN KEY (`fid`) REFERENCES `fruits` (`fruit_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_details_oid_foreign` FOREIGN KEY (`oid`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
