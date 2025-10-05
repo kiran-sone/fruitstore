@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2025 at 12:20 PM
+-- Generation Time: Oct 05, 2025 at 12:48 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -201,9 +201,9 @@ CREATE TABLE `order_billing_shipping_addresses` (
 --
 
 INSERT INTO `order_billing_shipping_addresses` (`oa_id`, `oid`, `b_fullname`, `b_phone`, `b_email`, `b_address`, `b_pincode`, `s_fullname`, `s_phone`, `s_email`, `s_address`, `s_pincode`) VALUES
-(1, 1, 'Kiran Sone', '+91 9164551309', 'kirans.git@gmail.com', 'Test address-1, India', '582103', 'Kiran N Sone', '0 9164551309', 'kirans606@gmail.com', 'Test address-2, India', '582120'),
-(2, 2, 'Test User', '+91 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-1, India', '582103', 'Test User', '0 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-2, India', '582120'),
-(3, 3, 'Test User', '+91 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-1, India', '582103', 'Test User', '0 9164551309', 'kiransone.dgsts@gmail.com', 'Test address-2, India', '582120');
+(1, 1, 'Kiran Sone', '+91 1112223333', 'user1@example.com', 'Test address-1, India', '582103', 'Kiran N Sone', '0 1112223333', 'user1@example.com', 'Test address-2, India', '582120'),
+(2, 2, 'Test User', '+91 2223334444', 'user2@example.com', 'Test address-1, India', '582103', 'Test User', '0 2223334444', 'user2@example.com', 'Test address-2, India', '582120'),
+(3, 3, 'Test User', '+91 3334445555', 'user2@example.com', 'Test address-1, India', '582103', 'Test User', '0 3334445555', 'user2@example.com', 'Test address-2, India', '582120');
 
 -- --------------------------------------------------------
 
@@ -269,9 +269,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `phone`, `user_type`) VALUES
-(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$OSaLMu2yqmv9TDIEvNc4XOvexFNhE784a7fknUTSCdq5c3KhkOlEq', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 1),
-(3, 'Kiran Sone', 'kirans.git@gmail.com', NULL, '$2y$10$OSaLMu2yqmv9TDIEvNc4XOvexFNhE784a7fknUTSCdq5c3KhkOlEq', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 0),
-(4, 'Test User', 'kiransone.dgsts@gmail.com', NULL, '$2y$10$d3CGvcpjncyh89JaAoDMjeLwtDAY0MTzZ0PYnfXj1iKRFPk/JA1Iq', NULL, '2025-10-04 11:53:51', '2025-10-04 11:53:51', NULL, NULL);
+(1, 'Admin', 'admin@example.com', NULL, '$2y$10$vEmDWYXWzIofTDXcR30fxuQ9rbSA7t0Lahr/B18F8/sg3NCDyaHVe', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 1),
+(3, 'Kiran Sone', 'user1@example.com', NULL, '$2y$10$vEmDWYXWzIofTDXcR30fxuQ9rbSA7t0Lahr/B18F8/sg3NCDyaHVe', NULL, '2025-09-25 07:00:54', '2025-09-25 07:00:54', NULL, 0),
+(4, 'Test User', 'user2@example.com', NULL, '$2y$10$vEmDWYXWzIofTDXcR30fxuQ9rbSA7t0Lahr/B18F8/sg3NCDyaHVe', NULL, '2025-10-04 11:53:51', '2025-10-04 11:53:51', NULL, NULL);
 
 --
 -- Indexes for dumped tables
