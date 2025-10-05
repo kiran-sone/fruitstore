@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\FruitType;
 use App\Models\Fruit;
 use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\OrderBillingShippingAddress;
 
 class Home extends Controller
 {
@@ -257,23 +260,167 @@ class Home extends Controller
         // echo "<pre>"; print_r($sessionData);exit;
         $data['SHIPPING_COST'] = env('SHIPPING_COST'); 
         Log::info("SHIPPING_COST: ".$data['SHIPPING_COST']);
-        $data['cart_items'] = Auth::check() ? 
-        CartItem::where('user_id', Auth::id())->with('Fruit')->get()->toArray() : 
-        CartItem::where('session_id', $request->session()->getId())->with('Fruit')->get()->toArray();
+        if (Auth::check()) {
+            // From DB
+            $data['cart_items'] = CartItem::where('user_id', Auth::id())
+                ->get()
+                ->toArray();
+        } else {
+            // From session
+            $data['cart_items'] = array_values($request->session()->get('cart', []));
+        }
+        if(!isset($data['cart_items']) || empty($data['cart_items'])){
+            return redirect()->route('cart')
+                ->with('error', 'No items in cart! Please add one or more items');
+        }
         // echo "<pre>"; print_r($data);exit;
         return view('checkout', $data);
     }
 
-    public function createorder(Request $request)
+    public function createOrder(Request $request)
     {
-        Log::info("Inside createorder function");
-        $validated = $request->validate([
-            'name1' => 'required',
-            'name2' => 'required',
+        // echo "<pre>"; print_r($_POST);exit;
+        Log::info("Inside createOrder method");
+        $request->validate([
+            'b_fullName'    => 'required',
+            'b_phone_num'   => 'required',
+            'b_emailId'     => 'nullable|email',
+            'b_fullAddr'    => 'required',
+            'b_pincode'     => 'required',
+            's_fullName'    => 'required',
+            's_phone_num'   => 'required',
+            's_emailId'     => 'nullable|email',
+            's_fullAddr'    => 'required',
+            's_pincode'     => 'required',
+        ], [
+            'b_fullName.required'   => 'Full name field is required.',
+            'b_phone_num.required'  => 'Phone number is required.',
+            'b_emailId.email'       => 'Please enter a valid email id.',
+            'b_fullAddr.required'   => 'Address is required.',
+            'b_pincode.required'    => 'Pincode is required.',
+            's_fullName.required'   => 'Full name is required.',
+            's_phone_num.required'  => 'Phone number is required.',
+            's_emailId.email'       => 'Please enter a valid email id.',
+            's_fullAddr.required'   => 'Shipping address is required.',
+            's_pincode.required'    => 'Pincode is required.',
         ]);
 
-        // henceforth order form is valid
-        
+        if (Auth::check()) {
+            // Logged-in: save directly to DB
+            $cartSubTotal = 0;
+            $cartTotal = 0;
+            $cart_items = CartItem::where('user_id', Auth::id())->get()->toArray();
+            if (!empty($cart_items)) {
+                foreach($cart_items as $item) {
+                    $fruit = (array) DB::table('fruits')
+                        ->where('fruit_id', $item['fruit_id'])
+                        ->first();
+                    $cartSubTotal += ($fruit['price'] * $item['quantity']);
+                }
+                $cartTotal = $cartSubTotal + env('SHIPPING_COST');
+                $order = Order::create([
+                    'uid'           => Auth::id(),
+                    'order_date'    => date("Y-m-d H:i:s"),
+                    'total_amount'  => $cartTotal,
+                    'shipping_cost'  => env('SHIPPING_COST'),
+                    'pay_method'    => 'CoD',
+                    'pay_status'    => 'Pending',
+                    'order_status'  => 'Pending',
+                ]);
+
+                if(!empty($order->order_id)) {
+                    Log::info("Created Order: ".$order->order_id);
+                    Log::info("Inserting address entries in order_billing_shipping_addresses table");
+                    OrderBillingShippingAddress::create([
+                        'oid'           => $order->order_id,
+                        'b_fullname'    => $request->input('b_fullName'),
+                        'b_phone'       => $request->input('b_phone_num'),
+                        'b_email'       => $request->input('b_emailId'),
+                        'b_address'     => $request->input('b_fullAddr'),
+                        'b_pincode'     => $request->input('b_pincode'),
+                        's_fullname'    => $request->input('s_fullName'),
+                        's_phone'       => $request->input('s_phone_num'),
+                        's_email'       => $request->input('s_emailId'),
+                        's_address'     => $request->input('s_fullAddr'),
+                        's_pincode'     => $request->input('s_pincode'),
+                    ]);
+
+                    Log::info("Creating item entries in order_details table");
+                    foreach($cart_items as $item) {
+                        $fruit = (array) DB::table('fruits')
+                            ->where('fruit_id', $item['fruit_id'])
+                            ->first();
+                        $subTotal = ($fruit['price'] * $item['quantity']);
+                        $orderDetail = OrderDetail::create([
+                            'oid'           => $order->order_id,
+                            'fid'           => $item['fruit_id'],
+                            'qty'           => $item['quantity'],
+                            'unit_price'    => $fruit['price'],
+                            'sub_total'     => $subTotal,
+                        ]);
+                    }
+                    Log::info("Deleting items from CartItem table for user: ".Auth::id());
+                    $deleted = CartItem::where('user_id', Auth::id())->delete();
+                    return redirect('orderdetails/'.$order->order_id)
+                        ->with('success', 'Order has been placed successfully!');
+                }
+                else {
+                    return redirect()->route('cart')
+                        ->with('error', 'Something went wrong while placing order!');
+                }
+            }
+            else {
+                return redirect()->route('cart')
+                ->with('error', 'No items in cart! Please add one or more items');
+            }
+        } 
+        else {
+            // Not logged in, send user to login
+            return redirect()->route('login')
+                ->with('error', 'Session might have expired! Please login');
+        }
+    }
+
+    public function orderDetails(Request $request, $oid)
+    {
+        Log::info("Inside order details page: ".$oid);
+        if(session('success')){
+            echo session('success');
+        }
+
+        if ($redirect = $this->checkUserLogin()) {
+            return $redirect;
+        }
+
+        $data['order_data'] = Order::where(['uid' => Auth::id(), 'order_id' => $oid])->first();
+                // ->get()
+                // ->toArray();
+        $data['odata_error'] = '';
+
+        if (!empty($data['order_data']['order_id'])) {
+            // From DB
+            $data['order_items'] = OrderDetail::join('fruits', 'fruits.fruit_id', '=', 'order_details.fid')->where('oid', $oid)->get()->toArray();
+        } else {
+            $data['odata_error'] = "Order data not found!";
+        }
+        // echo "<pre>"; print_r($data);exit;
+        return view('orderdetails', $data);
+    }
+
+    public function orders(Request $request)
+    {
+        Log::info("Inside orders page: ");
+
+        if ($redirect = $this->checkUserLogin()) {
+            return $redirect;
+        }
+
+        $data['order_data'] = Order::where(['uid' => Auth::id()])
+                ->get()
+                ->toArray();
+
+        // echo "<pre>"; print_r($data);exit;
+        return view('orders', $data);
     }
 
     public function versions()

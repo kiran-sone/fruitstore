@@ -17,6 +17,8 @@
             <div class="header-icons">
                 <a class="shopping-cart" href="{{ url('/cart')}}"><i class="fas fa-shopping-cart"></i></a>
                 @auth
+                    <a class="nav-link" href="{{ url('orders') }}"> My Orders
+                    </a>
                     <a class="nav-link" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Logout

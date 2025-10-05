@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dashboard | Fruit Store</title>
+    <title>Orders | Fruit Store</title>
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <meta name="color-scheme" content="light dark" />
@@ -19,6 +19,9 @@
     <meta name="keywords"
         content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant" />
     <!--end::Primary Meta Tags-->
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
@@ -41,6 +44,12 @@
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="{{ asset('assets/cms/css/adminlte.css') }}" />
     <!--end::Required Plugin(AdminLTE)-->
+
+    <!--begin::Datatables-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css" />
+    <!--end::Datatables-->
+
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -48,7 +57,7 @@
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
-        
+
         <!--begin::Header-->
         @include('cms.layout.header')
         <!--end::Header-->
@@ -56,7 +65,7 @@
         <!--begin::Sidebar-->
         @include('cms.layout.sidebar')
         <!--end::Sidebar-->
-        
+
         <!--begin::App Main-->
         <main class="app-main">
             <!--begin::App Content Header-->
@@ -66,12 +75,13 @@
                     <!--begin::Row-->
                     <div class="row">
                         <div class="col-sm-6">
-                            <h3 class="mb-0">Dashboard</h3>
+                            <h3 class="mb-0">Orders</h3>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-end">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                                <li class="breadcrumb-item active" aria-current="page">Manage Orders</li>
                             </ol>
                         </div>
                     </div>
@@ -87,71 +97,54 @@
                     <!-- Small Box (Stat card) -->
                     <!-- Small boxes (Stat box) -->
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-primary shadow-sm">
-                                    <i class="bi bi-diagram-3-fill"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Products</span>
-                                    <span class="info-box-number">
-                                        {{ DB::table('fruits')->count() }}
-                                    </span>
-                                </div>
-                                <!-- /.info-box-content -->
+                        <div class="col-12 mb-2">
+                            @if (session('success'))
+                            <div class="alert alert-success mb-2">
+                                {{ session('success') }}
                             </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-danger shadow-sm">
-                                    <i class="bi bi-people-fill"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Customers</span>
-                                    <span class="info-box-number">{{ DB::table('users')->count() }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
+                            @endif
+                            @if (session('error'))
+                            <div class="alert alert-danger mb-2">
+                                {{ session('error') }}
                             </div>
-                            <!-- /.info-box -->
+                            @endif
                         </div>
-                        <!-- /.col -->
-                        
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-warning shadow-sm">
-                                    <i class="bi bi-cart-check-fill"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Orders</span>
-                                    <span class="info-box-number">{{ DB::table('orders')->count() }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <!-- /.col -->
 
-                        <!-- fix for small devices only -->
-                        <!-- <div class="clearfix hidden-md-up"></div> -->
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-success shadow-sm">
-                                    <i class="bi bi-currency-euro"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Sales</span>
-                                    <span class="info-box-number">
-                                        <!-- <i class="bi bi-currency-rupee"></i>  -->
-                                        INR {{ DB::table('orders')->sum('total_amount') }}
-                                    </span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
+                        <div class="col-12 col-sm-12 col-md-12">
+                            @if(!empty($orders))
+
+                            <table class="table table-bordered" id="ordersTable" role="table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px" scope="col">#</th>
+                                        <th scope="col">Order ID</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Payment Method</th>
+                                        <th scope="col">Shipping Cost</th>
+                                        <th scope="col">Total Amount</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($orders as $okey => $odata)
+                                    <tr class="align-middle">
+                                        <td>{{ $okey+1 }}</td>
+                                        <td>{{ $odata['order_id'] }}</td>
+                                        <td>{{ $odata['name'] }}</td>
+                                        <td>{{ date('d M, Y', strtotime($odata['order_date'])) }}</td>
+                                        <td>{{ $odata['pay_method'] }}</td>
+                                        <td>{{ $odata['shipping_cost'] }}</td>
+                                        <td>{{ $odata['total_amount'] }}</td>
+                                        <td><a href="{{ url('/cms/orderdetails/' . $odata['order_id']) }}" class=""><i class="bi bi-arrow-right-circle-fill" style="font-size: 20px"></i></a></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @else
+                            <h4 class="text-danger">No data found!</h4>
+                            @endif
                         </div>
-                        <!-- /.col -->
                     </div>
                 </div>
                 <!--end::Container-->
@@ -159,7 +152,7 @@
             <!--end::App Content-->
         </main>
         <!--end::App Main-->
-        
+
         <!--begin::Footer-->
         @include('cms.layout.footer')
         <!--end::Footer-->
@@ -168,6 +161,8 @@
     <!--end::App Wrapper-->
 
     <!--begin::Script-->
+    <script src="{{ asset('assets/js/jquery-1.11.3.min.js') }}"></script>
+
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
         crossorigin="anonymous"></script>
@@ -206,6 +201,84 @@
     </script>
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+
+    <script>
+    let curUrl = "{{ url('cms/fruits') }}";
+    $(document).ready(function() {
+        // delete fruit type
+        $(document).on("click", ".btnDeleteFruit", function() {
+            let url = "{{ url('cms/deletefruit') }}";
+            let fruitId = $(this).data('fid');
+            Swal.fire({
+                title: "Are you sure to delete?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                // cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: {
+                            'fruitId': fruitId,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            // You can return JSON from controller
+                            if (response.status == 'success') {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: response.message,
+                                    icon: "success"
+                                }).then((result) => {
+                                    window.location.href = curUrl;
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "An error occured!",
+                                    text: response.message,
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: "Something went wrong!",
+                                text: xhr.responseText,
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        var fruitsDataTable = new DataTable('#ordersTable');
+
+        // Dropdown change event to filter data
+        $('#filterDropdown').on('change', function() {
+            var selectedCategory = $(this).val();
+
+            if (selectedCategory) {
+                // If a category is selected, filter based on the second column (Category)
+                fruitsDataTable.column(2).search('^' + selectedCategory + '$', true, false).draw();
+            } else {
+                // If no category is selected, reset the filter
+                fruitsDataTable.column(2).search('').draw();
+            }
+        });
+    });
+    </script>
+
 </body>
 <!--end::Body-->
 

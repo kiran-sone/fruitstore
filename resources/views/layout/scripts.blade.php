@@ -26,7 +26,7 @@
 
 <script>
 let frSearchUrl = "{{ url('/search-fruits') }}";
-let selFrUrl = "{{ url('/details') }}";
+let selFrUrl = "{{ url('/') }}";
 let cartUrl = "{{ url('/cart') }}";
 $(document).ready(function() {
     $("#prodSearch").autocomplete({
@@ -59,9 +59,9 @@ $(document).ready(function() {
         select: function(event, ui) {
             // ui.item has {label, value, id}
             console.log("Search item selected:", ui.item);
-
+            let itemSelected = ui.item.value.replace(' ','').toLowerCase();
             // Redirect to details page (example)
-            window.location.href = selFrUrl + "/" + ui.item.id;
+            window.location.href = selFrUrl + "/" + itemSelected;
         }
     });
 

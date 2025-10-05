@@ -40,7 +40,7 @@
                     <!--end::User Image-->
                     <!--begin::Menu Footer-->
                     <li class="user-footer">
-                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        <!-- <a href="#" class="btn btn-default btn-flat">Profile</a> -->
                         @auth
                             <a class="btn btn-default btn-flat float-end" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

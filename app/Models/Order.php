@@ -15,7 +15,10 @@ class Order extends Model
         'uid',
         'order_date',
         'total_amount',
-        'status',
+        'shipping_cost',
+        'pay_method',
+        'pay_status',
+        'order_status',
     ];
 
     public function user()

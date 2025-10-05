@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 use App\Models\FruitType;
 use App\Models\Fruit;
 use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderDetail;
 
 class Cms extends Controller
 {
@@ -77,6 +80,17 @@ class Cms extends Controller
         Log::info("Inside Admin dashboard page");
         // echo "<pre>"; print_r($data);exit;
         return view('cms.dashboard');
+    }
+
+    public function users()
+    {
+        if ($redirect = $this->checkAdminLogin()) {
+            return $redirect;
+        }
+        Log::info("Inside users page");
+        $data['users'] = User::get()->toArray();
+        // echo "<pre>"; print_r($data);exit;
+        return view('cms.users', $data);
     }
 
     //Start - Code Fruit Types
@@ -332,6 +346,34 @@ class Cms extends Controller
             ];
             return response()->json($jsonArr);
         }
+    }
+
+    public function orders()
+    {
+        if ($redirect = $this->checkAdminLogin()) {
+            return $redirect;
+        }
+        Log::info("Inside orders page");
+        $data['orders'] = Order::join('users', 'orders.uid', '=', 'users.id')->get()->toArray();
+        // echo "<pre>"; print_r($data);exit;
+        return view('cms.orders', $data);
+    }
+
+    public function orderDetails(Request $request, $oid)
+    {
+        if ($redirect = $this->checkAdminLogin()) {
+            return $redirect;
+        }
+        Log::info("Inside orderDetails page");
+        $data['order_data'] = Order::where(['order_id' => $oid])->first();
+        if (!empty($data['order_data']['order_id'])) {
+            // From DB
+            $data['order_items'] = OrderDetail::join('fruits', 'fruits.fruit_id', '=', 'order_details.fid')->where('oid', $oid)->get()->toArray();
+        } else {
+            $data['odata_error'] = "Order data not found!";
+        }
+        // echo "<pre>"; print_r($data);exit;
+        return view('cms.orderdetails', $data);
     }
 
 }

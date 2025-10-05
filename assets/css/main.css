@@ -2669,14 +2669,14 @@ tr.total-data td strong {
   padding: 20px;
 }
 
-.billing-address-form form p input {
+.billing-address-form p input {
   border: 1px solid #ddd;
   padding: 15px;
   width: 100%;
   border-radius: 3px;
 }
 
-.billing-address-form form p textarea {
+.billing-address-form p textarea {
   width: 100%;
   border-radius: 3px;
   border: 1px solid #ddd;
@@ -2701,7 +2701,7 @@ tr.total-data td strong {
   color: #F28123;
 }
 
-.billing-address-form form p:last-child {
+.billing-address-form p:last-child {
   margin-bottom: 0;
 }
 

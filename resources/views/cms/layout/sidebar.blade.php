@@ -70,14 +70,14 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="../generate/theme.html" class="nav-link">
+                    <a href="{{ url('/cms/users') }}" class="nav-link">
                         <i class="nav-icon bi bi-people"></i>
                         <p>Customers</p>
                     </a>
                 </li>
                 
                 <li class="nav-item">
-                    <a href="../generate/theme.html" class="nav-link">
+                    <a href="{{ url('/cms/orders') }}" class="nav-link">
                         <i class="nav-icon bi bi-cart-check"></i>
                         <p>Orders</p>
                     </a>
