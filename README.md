@@ -1,61 +1,51 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# Fruit Store: A demo ecommerce web application built with Laravel 8 and MySQL
 
-## About Laravel
+## About Fruit Store application
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Fruit Store is a demo ecommerce web application developed using Laravel 8 and MySQL. 
+It has following modules:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Home page with product categories listed(fruit types).
+- Producs page (fruits).
+- Fruit details (add to cart)
+- Cart & Checkout
+- Sign Up and Sign In and Log Out
+- Order Details
+- Orders List
+- Admin panel
+    - Login
+    - Dashboard with dashlets
+    - Create and manage Product categories (fruit types)
+    - Create and manage Products (fruits)
+    - Create and manage Customers
+    - Manage Orders
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## Application Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Laravel version 8
+- MySQL database (.sql file is available in this application package)
+- Configure/update .env or .htaccess as per your local environment setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Application Screenshots
+<img width="960" height="446" alt="Image" src="https://github.com/user-attachments/assets/d551cb1c-ff8a-41f8-901b-fac3c1e6f6cc" />
+<img width="960" height="446" alt="Image" src="https://github.com/user-attachments/assets/8bb40a74-23e7-4e22-81fd-ba84c97c0ca9" />
+<img width="958" height="473" alt="Image" src="https://github.com/user-attachments/assets/011d3156-4f48-4808-87ab-db2de2ae525b" />
+<img width="960" height="446" alt="Image" src="https://github.com/user-attachments/assets/a750fcbc-dc2d-4816-9303-2a485d063316" />
+<img width="960" height="629" alt="Image" src="https://github.com/user-attachments/assets/d2192383-3d3f-440f-b4a3-dda43fd4d91c" />
 
-## Laravel Sponsors
+<img width="959" height="1261" alt="Image" src="https://github.com/user-attachments/assets/6de798db-a8df-4011-9077-a6edb1373d6d" />
+<img width="960" height="1314" alt="Image" src="https://github.com/user-attachments/assets/dababd01-62bf-42a0-994d-ee673dc367b3" />
+<img width="960" height="1829" alt="Image" src="https://github.com/user-attachments/assets/d7f98817-cda9-4e08-b2ee-d10df02269ea" />
+<img width="1920" height="2701" alt="Image" src="https://github.com/user-attachments/assets/60948d53-2b0a-45d7-ac73-f2841d356212" />
+<img width="1920" height="1951" alt="Image" src="https://github.com/user-attachments/assets/b5ead233-ceb1-4c96-93f7-bc809fb9a483" />
+<img width="1920" height="2475" alt="Image" src="https://github.com/user-attachments/assets/186993d3-e974-4332-a2dc-77e0ead0f542" />
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Credits
+- This application uses AdminLTE.io theme for Admin backend portal and is not being used for commercial purpose.
+  [AdminLTE](https://adminlte.io/)
+- This application uses a ThemeWagon theme for fronted website which is not being used for commercial purpose. Link is given below:
+  [ThemeWagon](https://themewagon.com/themes/fruitkha-free-bootstrap-4-responsive-food-business-template/)
