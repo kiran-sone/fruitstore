@@ -4,8 +4,8 @@
 
 ## About Fruit Store application
 
-Fruit Store is a demo ecommerce web application developed using Laravel 8 and MySQL. 
-It has following modules:
+Fruit Store is a demo ecommerce web application developed using Laravel 8 and MySQL. <br>
+### Application modules:
 
 - Home page with product categories listed(fruit types).
 - Producs page (fruits).
@@ -21,8 +21,6 @@ It has following modules:
     - Create and manage Products (fruits)
     - Create and manage Customers
     - Manage Orders
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 ## Application Requirements
 
